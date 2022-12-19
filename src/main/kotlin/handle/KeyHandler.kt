@@ -15,27 +15,19 @@ class KeyHandler : KeyListener {
     }
 
     override fun keyPressed(e: KeyEvent?) {
-        val code: Int? = e?.keyCode
-        extracted(code, true)
+        extracted(e?.keyCode, true)
     }
 
     private fun extracted(code: Int?, setBool: Boolean) {
-        if (code == KeyEvent.VK_W) {
-            upPressed = setBool
-        }
-        if (code == KeyEvent.VK_S) {
-            downPressed = setBool
-        }
-        if (code == KeyEvent.VK_A) {
-            leftPressed = setBool
-        }
-        if (code == KeyEvent.VK_D) {
-            rightPressed = setBool
+        when(code){
+            KeyEvent.VK_UP -> upPressed = setBool
+            KeyEvent.VK_DOWN -> downPressed = setBool
+            KeyEvent.VK_LEFT -> leftPressed = setBool
+            KeyEvent.VK_RIGHT -> rightPressed = setBool
         }
     }
 
     override fun keyReleased(e: KeyEvent?) {
-        val code: Int? = e?.keyCode
-        extracted(code, false)
+        extracted(e?.keyCode, false)
     }
 }
