@@ -18,9 +18,12 @@ class Player(
     }
 
     fun getPlayerImage() {
-        front = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front.png"))
-        step1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
-        step2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
+        front_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front.png"))
+        step1_rigth = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
+        step2_rigth = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
+        front_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_left.png"))
+        step1_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1_left.png"))
+        step2_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
     }
 
     fun update() {
@@ -50,10 +53,10 @@ class Player(
     fun draw(g2: Graphics2D) {
         var image: BufferedImage? = null
         when (direction) {
-            "up" -> image = front
-            "down" -> image = front
-            "left" -> image = step1
-            "right" -> image = step2
+            "up" -> image = front_right
+            "down" -> image = front_left
+            "left" -> image = step1_left
+            "right" -> image = step1_rigth
         }
         g2.drawImage(image!!, x!!, y!!, gp.tileSize, gp.tileSize, null)
     }
