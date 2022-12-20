@@ -73,7 +73,9 @@ class GamePanel : JPanel, Runnable {
     }
 
     fun update() {
-        player.update()
+        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
+            player.update()
+        }
     }
 
     override fun paintComponent(g: Graphics) {

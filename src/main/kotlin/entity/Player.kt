@@ -9,7 +9,7 @@ import javax.imageio.ImageIO
 class Player(
     val gp: GamePanel,
     val keyH: KeyHandler
-) : Entity(4) {
+) : Entity(3) {
     init {
         x = 100
         y = 100
@@ -49,6 +49,15 @@ class Player(
                 x += speed
             }
         }
+        spriteCounter++
+        if(spriteCounter > 12){
+           if(spriteNum==1){
+              spriteNum = 2
+           } else if(spriteNum == 2){
+               spriteNum = 1
+           }
+            spriteCounter = 0
+        }
     }
 
     fun draw(g2: Graphics2D) {
@@ -56,8 +65,22 @@ class Player(
         when (direction) {
             Direction.UP -> image = back
             Direction.DOWN -> image = front_left
-            Direction.LEFT -> image = step1_left
-            Direction.RIGHT -> image = step1_right
+            Direction.LEFT -> {
+                if(spriteNum == 1){
+                   image = step1_left
+                }
+                if (spriteNum == 2){
+                    image = step2_left
+                }
+            }
+            Direction.RIGHT ->{
+                if(spriteNum == 1){
+                   image = step1_right
+                }
+                if (spriteNum == 2){
+                    image = step2_right
+                }
+            }
             Direction.NOTHING -> image = front_right
         }
         g2.drawImage(image!!, x, y, gp.tileSize, gp.tileSize, null)

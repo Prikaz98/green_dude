@@ -17,6 +17,9 @@ open class Entity(
     var y : Int = 1
     var direction: Direction = Direction.NOTHING
 
+    var spriteCounter = 0
+    var spriteNum = 1
+
 }
 enum class Direction {
     UP,DOWN,LEFT,RIGHT,NOTHING
