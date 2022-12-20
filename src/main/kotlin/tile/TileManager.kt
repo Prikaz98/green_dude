@@ -7,37 +7,47 @@ import java.io.InputStreamReader
 import javax.imageio.ImageIO
 
 class TileManager(gp: GamePanel) {
-    val tiles: Array<Tile?> = arrayOfNulls(10)
+
+    data class ElementChar(val x: Int, val selectTile: Int)
+    data class ElementRow(val y: Int, val cells: List<ElementChar>)
+
+    val tiles: Array<Tile> = getTitleImage()
+    val map = loadMap("/map")
     val tileSize = gp.tileSize
 
-    init {
-        getTitleImage()
-    }
-
-    private fun getTitleImage() {
-        tiles.set(0, Tile(false, ImageIO.read(javaClass.getResourceAsStream("/texture/sand.jpg"))))
-        tiles.set(1, Tile(true, ImageIO.read(javaClass.getResourceAsStream("/texture/wall.png"))))
-        tiles.set(2, Tile(false, ImageIO.read(javaClass.getResourceAsStream("/texture/water.png"))))
+    private fun getTitleImage(): Array<Tile> {
+        return listOf("/texture/sand.jpg", "/texture/wall.png", "/texture/water.png").map { path ->
+            Tile(false, ImageIO.read(javaClass.getResourceAsStream(path)))
+        }.toTypedArray()
     }
 
     fun draw(g2: Graphics2D) {
-        val map = BufferedReader(InputStreamReader(javaClass.getResourceAsStream("/map")))
+        map.forEach { elementRow ->
+            elementRow.cells.forEach { cell ->
+                g2.drawImage(
+                    tiles.get(cell.selectTile)?.image,
+                    cell.x * tileSize,
+                    elementRow.y * tileSize,
+                    tileSize,
+                    tileSize,
+                    null
+                )
+            }
+        }
+    }
 
-        data class ElementChar(val x: Int, val selectTile: Int)
-        data class ElementRow(val y: Int, val cells: List<ElementChar>)
+    private fun loadMap(path : String): ArrayList<ElementRow> {
+        val map = BufferedReader(InputStreamReader(javaClass.getResourceAsStream(path)))
+
         val mapData = map.lineSequence().foldIndexed(ArrayList<ElementRow>()) { index, acc, row ->
-            val chars = row.toCharArray().asSequence().foldIndexed(ArrayList<ElementChar>(), { index, accChar, selectTile ->
-                accChar.add(ElementChar(index, selectTile.digitToInt()))
-                accChar
-            })
+            val chars =
+                row.toCharArray().asSequence().foldIndexed(ArrayList<ElementChar>(), { index, accChar, selectTile ->
+                    accChar.add(ElementChar(index, selectTile.digitToInt()))
+                    accChar
+                })
             acc.add(ElementRow(index, chars))
             acc
         }
-        mapData.forEach{ elementRow ->
-            elementRow.cells.forEach{ cell ->
-                g2.drawImage(tiles.get(cell.selectTile)?.image, cell.x * tileSize, elementRow.y * tileSize, tileSize, tileSize, null)
-            }
-        }
-
+        return mapData
     }
 }
