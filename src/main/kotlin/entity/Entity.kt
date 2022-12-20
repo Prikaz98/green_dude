@@ -6,6 +6,7 @@ open class Entity(
     val speed : Int,
 ) {
 
+    var back : BufferedImage?=null
     var front_right : BufferedImage?=null
     var step1_right : BufferedImage?=null
     var step2_right : BufferedImage?=null
