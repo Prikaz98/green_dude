@@ -1,7 +1,8 @@
 package panels
 
 import entity.Player
-import handle.KeyHandler
+import handle.KeyHandlerImpl
+import tile.TileManager
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -20,9 +21,9 @@ class GamePanel : JPanel, Runnable {
     var gameThread: Thread? = null
 
     val FPS = 60.0
-    val keyH = KeyHandler()
-
-    val player = Player(this,keyH)
+    val tileManager = TileManager(this)
+    val keyH = KeyHandlerImpl()
+    val player = Player(this).init()
 
     constructor() {
         this.preferredSize = Dimension(screenWidth, screenHeight)
@@ -38,22 +39,19 @@ class GamePanel : JPanel, Runnable {
     }
 
     override fun run() {
-        loopWithoutThreadSleep()
+        gameLoopStart()
     }
 
-    private fun loopWithoutThreadSleep(){
+    private fun gameLoopStart(){
         val drawInterval = 1_000_000_000 / FPS // 0.016666.. seconds
         var delta = 0.0
         var lastTime : Long = System.nanoTime()
         var currentTime : Long?
-        var timer = 0L
-        var drawCount = 0
 
         while (gameThread != null) {
             currentTime = System.nanoTime()
 
             delta += (currentTime - lastTime) / drawInterval
-            timer += (currentTime - lastTime)
             lastTime = currentTime
 
             if(delta >= 1) {
@@ -62,19 +60,13 @@ class GamePanel : JPanel, Runnable {
                 //2. DRAW: draw the screen with the updated information
                 repaint()
                 delta--
-                drawCount++
-            }
-            if(timer >= 1_000_000_000){
-                println("FPS : $drawCount")
-                drawCount = 0
-                timer = 0
             }
         }
     }
 
     fun update() {
         if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
-            player.update()
+            player.update(keyH)
         }
     }
 
@@ -82,6 +74,9 @@ class GamePanel : JPanel, Runnable {
         super.paintComponent(g)
 
         val g2: Graphics2D = g as Graphics2D
+
+        tileManager.draw(g2)
+
         player.draw(g2)
 
         g2.dispose()

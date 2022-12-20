@@ -1,5 +1,6 @@
 package entity
 
+import DrawElement
 import handle.KeyHandler
 import panels.GamePanel
 import java.awt.Graphics2D
@@ -7,14 +8,15 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
 class Player(
-    val gp: GamePanel,
-    val keyH: KeyHandler
-) : Entity(3) {
-    init {
+    val gp: GamePanel
+) : Entity(3), DrawElement {
+
+    override fun init(): DrawElement {
         x = 100
         y = 100
         direction = Direction.DOWN
         getPlayerImage()
+        return this
     }
 
     private fun getPlayerImage() {
@@ -29,7 +31,7 @@ class Player(
         left2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
     }
 
-    fun update() {
+    override fun update(keyH: KeyHandler) {
         when {
             keyH.upPressed -> {
                 direction = Direction.UP
@@ -62,7 +64,8 @@ class Player(
         }
     }
 
-    fun draw(g2: Graphics2D) {
+
+    override fun draw(g2: Graphics2D) {
         fun evaluateImageForStep(vararg args: BufferedImage?): BufferedImage? {
             return args.get(spriteNum - 1)
         }

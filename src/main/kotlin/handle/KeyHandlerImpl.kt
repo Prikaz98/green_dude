@@ -3,12 +3,12 @@ package handle
 import java.awt.event.KeyEvent
 import java.awt.event.KeyListener
 
-class KeyHandler : KeyListener {
+class KeyHandlerImpl : KeyHandler {
 
-    var upPressed: Boolean = false
-    var downPressed: Boolean = false
-    var leftPressed: Boolean = false
-    var rightPressed: Boolean = false
+    override var upPressed: Boolean = false
+    override var downPressed: Boolean = false
+    override var leftPressed: Boolean = false
+    override var rightPressed: Boolean = false
 
     override fun keyTyped(e: KeyEvent?) {
 
@@ -30,4 +30,10 @@ class KeyHandler : KeyListener {
     override fun keyReleased(e: KeyEvent?) {
         extracted(e?.keyCode, false)
     }
+}
+interface KeyHandler: KeyListener {
+    var upPressed: Boolean
+    var downPressed: Boolean
+    var leftPressed: Boolean
+    var rightPressed: Boolean
 }
