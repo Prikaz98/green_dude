@@ -21,10 +21,10 @@ class Player(
         back = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_back.png"))
         front_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front.png"))
         step1_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
-//        step2_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
+        step2_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
         front_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_left.png"))
         step1_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1_left.png"))
-//        step2_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
+        step2_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
     }
 
     fun update() {
@@ -33,14 +33,17 @@ class Player(
                 direction = Direction.UP
                 y -= speed
             }
+
             keyH.downPressed -> {
                 direction = Direction.DOWN
                 y += speed
             }
+
             keyH.leftPressed -> {
                 direction = Direction.LEFT
                 x -= speed
             }
+
             keyH.rightPressed -> {
                 direction = Direction.RIGHT
                 x += speed
