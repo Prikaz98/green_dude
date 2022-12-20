@@ -13,14 +13,14 @@ class Player(
     init {
         x = 100
         y = 100
-        direction = "down"
+        direction = Direction.DOWN
         getPlayerImage()
     }
 
-    fun getPlayerImage() {
+    private fun getPlayerImage() {
         front_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front.png"))
-        step1_rigth = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
-        step2_rigth = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
+        step1_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
+        step2_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
         front_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_left.png"))
         step1_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1_left.png"))
         step2_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
@@ -28,24 +28,21 @@ class Player(
 
     fun update() {
         when {
-            keyH.upPressed == true -> {
-                direction = "up"
-                y = y?.minus(speed)
+            keyH.upPressed -> {
+                direction = Direction.UP
+                y -= speed
             }
-
-            keyH.downPressed == true -> {
-                direction = "down"
-                y = y?.plus(speed)
+            keyH.downPressed -> {
+                direction = Direction.DOWN
+                y += speed
             }
-
-            keyH.leftPressed == true -> {
-                direction = "left"
-                x = x?.minus(speed)
+            keyH.leftPressed -> {
+                direction = Direction.LEFT
+                x -= speed
             }
-
-            keyH.rightPressed == true -> {
-                direction = "right"
-                x = x?.plus(speed)
+            keyH.rightPressed -> {
+                direction = Direction.RIGHT
+                x += speed
             }
         }
     }
@@ -53,11 +50,12 @@ class Player(
     fun draw(g2: Graphics2D) {
         var image: BufferedImage? = null
         when (direction) {
-            "up" -> image = front_right
-            "down" -> image = front_left
-            "left" -> image = step1_left
-            "right" -> image = step1_rigth
+            Direction.UP -> image = front_right
+            Direction.DOWN -> image = front_left
+            Direction.LEFT -> image = step1_left
+            Direction.RIGHT -> image = step1_right
+            Direction.NOTHING -> image = front_right
         }
-        g2.drawImage(image!!, x!!, y!!, gp.tileSize, gp.tileSize, null)
+        g2.drawImage(image!!, x, y, gp.tileSize, gp.tileSize, null)
     }
 }

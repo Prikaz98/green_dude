@@ -5,10 +5,10 @@ import java.awt.event.KeyListener
 
 class KeyHandler : KeyListener {
 
-    var upPressed: Boolean? = null
-    var downPressed: Boolean? = null
-    var leftPressed: Boolean? = null
-    var rightPressed: Boolean? = null
+    var upPressed: Boolean = false
+    var downPressed: Boolean = false
+    var leftPressed: Boolean = false
+    var rightPressed: Boolean = false
 
     override fun keyTyped(e: KeyEvent?) {
 
