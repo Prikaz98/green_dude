@@ -6,13 +6,15 @@ open class Entity(
     val speed : Int,
 ) {
 
-    var back : BufferedImage?=null
-    var front_right : BufferedImage?=null
-    var step1_right : BufferedImage?=null
-    var step2_right : BufferedImage?=null
+    var down1 : BufferedImage?=null
+    var down2 : BufferedImage?=null
+    var up1 : BufferedImage?=null
+    var up2 : BufferedImage?=null
+    var right1 : BufferedImage?=null
+    var right2 : BufferedImage?=null
     var front_left : BufferedImage?=null
-    var step1_left : BufferedImage?=null
-    var step2_left : BufferedImage?=null
+    var left1 : BufferedImage?=null
+    var left2 : BufferedImage?=null
     var x : Int = 1
     var y : Int = 1
     var direction: Direction = Direction.NOTHING

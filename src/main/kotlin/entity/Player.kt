@@ -18,13 +18,15 @@ class Player(
     }
 
     private fun getPlayerImage() {
-        back = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_back.png"))
-        front_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front.png"))
-        step1_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
-        step2_right = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
+        up1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_up_1.png"))
+        up2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_up_2.png"))
+        down1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_down_1.png"))
+        down2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_down_2.png"))
+        right1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
+        right2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
         front_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_left.png"))
-        step1_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1_left.png"))
-        step2_left = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
+        left1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1_left.png"))
+        left2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
     }
 
     fun update() {
@@ -50,38 +52,28 @@ class Player(
             }
         }
         spriteCounter++
-        if(spriteCounter > 12){
-           if(spriteNum==1){
-              spriteNum = 2
-           } else if(spriteNum == 2){
-               spriteNum = 1
-           }
+        if (spriteCounter > 12) {
+            if (spriteNum == 1) {
+                spriteNum = 2
+            } else if (spriteNum == 2) {
+                spriteNum = 1
+            }
             spriteCounter = 0
         }
     }
 
     fun draw(g2: Graphics2D) {
+        fun evaluateImageForStep(vararg args: BufferedImage?): BufferedImage? {
+            return args.get(spriteNum - 1)
+        }
+
         var image: BufferedImage? = null
         when (direction) {
-            Direction.UP -> image = back
-            Direction.DOWN -> image = front_left
-            Direction.LEFT -> {
-                if(spriteNum == 1){
-                   image = step1_left
-                }
-                if (spriteNum == 2){
-                    image = step2_left
-                }
-            }
-            Direction.RIGHT ->{
-                if(spriteNum == 1){
-                   image = step1_right
-                }
-                if (spriteNum == 2){
-                    image = step2_right
-                }
-            }
-            Direction.NOTHING -> image = front_right
+            Direction.UP -> image = evaluateImageForStep(up1, up2)
+            Direction.DOWN -> image = evaluateImageForStep(down1, down2)
+            Direction.LEFT -> image = evaluateImageForStep(left1, left2)
+            Direction.RIGHT -> image = evaluateImageForStep(right1, right2)
+            Direction.NOTHING -> image = front_left
         }
         g2.drawImage(image!!, x, y, gp.tileSize, gp.tileSize, null)
     }
