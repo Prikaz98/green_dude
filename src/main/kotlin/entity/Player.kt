@@ -2,6 +2,7 @@ package entity
 
 import handle.KeyHandler
 import panels.GamePanel
+import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
@@ -20,7 +21,8 @@ class Player(
         return if (solidArea != null) {
             solidArea!!
         } else {
-            solidArea = Rectangle(0, 0, gp.tileSize, gp.tileSize)
+
+            solidArea = Rectangle(0, 0, gp.tileSize - 10, gp.tileSize - 10)
             solidArea!!;
         }
     }
