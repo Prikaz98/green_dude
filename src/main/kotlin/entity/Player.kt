@@ -11,12 +11,13 @@ class Player(
 ) : Entity(3) {
 
     var screenX: Int? = null
+    var screenY: Int? = null
+
     val deviationX : Int
         get() = this.screenX?.plus(this.worldX) ?: this.worldX
     val deviationY : Int
         get() = this.screenY?.plus(this.worldY) ?: this.worldY
 
-    var screenY: Int? = null
 
     override fun init(): Player {
         screenX = gp.screenWidth / 2 - (gp.tileSize / 2)
@@ -28,8 +29,8 @@ class Player(
     }
 
     private fun setDefaultValues() {
-        worldX = gp.tileSize * 5
-        worldY = gp.tileSize * 5
+        worldX = gp.tileSize
+        worldY = gp.tileSize
         direction = Direction.DOWN
     }
 
