@@ -1,12 +1,13 @@
 package tile
 
+import entity.Player
 import panels.GamePanel
 import java.awt.Graphics2D
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class TileManager(gp: GamePanel) {
-
+    val player : Player = gp.player
     data class ElementChar(val x: Int, val selectTile: Int)
     data class ElementRow(val y: Int, val cells: List<ElementChar>)
 
@@ -18,14 +19,20 @@ class TileManager(gp: GamePanel) {
     fun draw(g2: Graphics2D) {
         map.forEach { elementRow ->
             elementRow.cells.forEach { cell ->
+                val worldX = elementRow.y * tileSize
+                val worldY = cell.x * tileSize
+                val screenX = worldY - player.deviationX
+                val screenY = worldX - player.deviationY
+
                 g2.drawImage(
                     tiles.get(cell.selectTile)?.image,
-                    cell.x * tileSize,
-                    elementRow.y * tileSize,
+                    screenX,
+                    screenY,
                     tileSize,
                     tileSize,
                     null
                 )
+
             }
         }
     }

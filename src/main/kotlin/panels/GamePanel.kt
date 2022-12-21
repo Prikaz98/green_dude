@@ -21,9 +21,15 @@ class GamePanel : JPanel, Runnable {
     var gameThread: Thread? = null
 
     val FPS = 60.0
+    val player: Player = Player(this).init()
     val tileManager = TileManager(this)
     val keyH = KeyHandlerImpl()
-    val player = Player(this).init()
+
+    //WORLD settings
+    val maxWorldCol = 50
+    val maxWorldRow = 50
+    val worldWidth = tileSize * maxWorldCol
+    val worldHeight = tileSize * maxWorldRow
 
     constructor() {
         this.preferredSize = Dimension(screenWidth, screenHeight)

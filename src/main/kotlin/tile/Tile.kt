@@ -22,7 +22,21 @@ enum class TileEnum : TileEn {
         override fun getTile(): Tile {
             return Tile(false, ImageIO.read(javaClass.getResourceAsStream("/tiles/water.png")))
         }
-
+    },
+    EARTH {
+        override fun getTile(): Tile {
+            return Tile(false, ImageIO.read(javaClass.getResourceAsStream("/tiles/earth.png")))
+        }
+    },
+    GRASS {
+        override fun getTile(): Tile {
+            return Tile(false, ImageIO.read(javaClass.getResourceAsStream("/tiles/grass.png")))
+        }
+    },
+    TREE {
+        override fun getTile(): Tile {
+            return Tile(false, ImageIO.read(javaClass.getResourceAsStream("/tiles/tree.png")))
+        }
     }
 }
 
