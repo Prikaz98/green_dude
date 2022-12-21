@@ -1,5 +1,6 @@
 package panels
 
+import CollisionChecker
 import entity.Player
 import handle.KeyHandlerImpl
 import tile.TileManager
@@ -21,6 +22,7 @@ class GamePanel : JPanel, Runnable {
     var gameThread: Thread? = null
 
     val FPS = 60.0
+    val collisionChecker = CollisionChecker(this)
     val player: Player = Player(this).init()
     val tileManager = TileManager(this)
     val keyH = KeyHandlerImpl()

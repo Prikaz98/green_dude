@@ -2,13 +2,14 @@ package entity
 
 import handle.KeyHandler
 import java.awt.Graphics2D
+import java.awt.Rectangle
 import java.awt.image.BufferedImage
 
 abstract class Entity(
     val speed : Int,
 ) {
-    var worldX : Int = 1
-    var worldY : Int = 1
+    var worldX : Int = 0
+    var worldY : Int = 0
     var down1 : BufferedImage?=null
     var down2 : BufferedImage?=null
     var up1 : BufferedImage?=null
@@ -21,7 +22,9 @@ abstract class Entity(
 
     var spriteCounter = 0
     var spriteNum = 1
+    var collisionOn = false
     abstract fun draw(g2: Graphics2D)
+    abstract fun solidArea() : Rectangle
     abstract fun update(keyHandler: KeyHandler)
     abstract fun init(): Entity
 }

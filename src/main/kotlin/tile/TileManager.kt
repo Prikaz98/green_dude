@@ -6,29 +6,34 @@ import java.awt.Graphics2D
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
+fun ArrayList<TileManager.ElementRow>.getByXY(x: Int, y: Int): TileManager.ElementCell {
+    return this.get(y).cells.get(x)
+}
+
 class TileManager(gp: GamePanel) {
-    val player : Player = gp.player
-    data class ElementChar(val x: Int, val selectTile: Int)
-    data class ElementRow(val y: Int, val cells: List<ElementChar>)
+    val player: Player = gp.player
+
+    data class ElementCell(val x: Int, val selectTile: Int)
+    data class ElementRow(val y: Int, val cells: List<ElementCell>)
 
     val tiles: Array<Tile> = TileEnum.values().map { it.getTile() }.toTypedArray()
-    val map = loadMap("/map")
+    val mapTileNumber = loadMap("/map")
     val tileSize = gp.tileSize
 
 
     fun draw(g2: Graphics2D) {
-        map.forEach { elementRow ->
+        mapTileNumber.forEach { elementRow ->
             elementRow.cells.forEach { cell ->
                 val worldX = cell.x * tileSize
                 val worldY = elementRow.y * tileSize
                 val screenX = worldX - player.worldX + player.screenX
                 val screenY = worldY - player.worldY + player.screenY
 
-                if(worldX + tileSize > player.worldX - player.screenX
+                if (worldX + tileSize > player.worldX - player.screenX
                     && worldX - tileSize < player.worldX + player.screenX
                     && worldY + tileSize > player.worldY - player.screenY
                     && worldY - tileSize < player.worldY + player.screenY
-                ){
+                ) {
                     g2.drawImage(
                         tiles.get(cell.selectTile)?.image,
                         screenX,
@@ -42,13 +47,14 @@ class TileManager(gp: GamePanel) {
         }
     }
 
+
     private fun loadMap(path: String): ArrayList<ElementRow> {
         val map = BufferedReader(InputStreamReader(javaClass.getResourceAsStream(path)))
 
         return map.lineSequence().foldIndexed(ArrayList()) { index, acc, row ->
             val chars =
-                row.toCharArray().asSequence().foldIndexed(ArrayList<ElementChar>(), { index, accChar, selectTile ->
-                    accChar.add(ElementChar(index, selectTile.digitToInt()))
+                row.toCharArray().asSequence().foldIndexed(ArrayList<ElementCell>(), { index, accChar, selectTile ->
+                    accChar.add(ElementCell(index, selectTile.digitToInt()))
                     accChar
                 })
             acc.add(ElementRow(index, chars))

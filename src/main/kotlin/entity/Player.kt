@@ -3,6 +3,7 @@ package entity
 import handle.KeyHandler
 import panels.GamePanel
 import java.awt.Graphics2D
+import java.awt.Rectangle
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
@@ -12,6 +13,17 @@ class Player(
 
     var screenX: Int = gp.screenWidth / 2 - (gp.tileSize / 2)
     var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
+
+    private var solidArea: Rectangle? = null
+
+    override fun solidArea(): Rectangle {
+        return if (solidArea != null) {
+            solidArea!!
+        } else {
+            solidArea = Rectangle(0, 0, gp.tileSize, gp.tileSize)
+            solidArea!!;
+        }
+    }
 
     override fun init(): Player {
         setDefaultValues()
@@ -36,28 +48,45 @@ class Player(
         left2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
     }
 
-    override fun update(keyH: KeyHandler) {
+    private fun KeyHandler.setActionOnPressed(
+        onUp: () -> Unit, onDown: () -> Unit, onLeft: () -> Unit, onRight: () -> Unit
+    ) {
         when {
-            keyH.upPressed -> {
-                direction = Direction.UP
-                worldY -= speed
+            this.upPressed -> {
+                onUp()
             }
 
-            keyH.downPressed -> {
-                direction = Direction.DOWN
-                worldY += speed
+            this.downPressed -> {
+                onDown()
             }
 
-            keyH.leftPressed -> {
-                direction = Direction.LEFT
-                worldX -= speed
+            this.leftPressed -> {
+                onLeft()
             }
 
-            keyH.rightPressed -> {
-                direction = Direction.RIGHT
-                worldX += speed
+            this.rightPressed -> {
+                onRight()
             }
         }
+
+    }
+
+    override fun update(keyH: KeyHandler) {
+        keyH.setActionOnPressed(
+            onUp = { direction = Direction.UP },
+            onDown = { direction = Direction.DOWN },
+            onLeft = { direction = Direction.LEFT },
+            onRight = { direction = Direction.RIGHT })
+
+        collisionOn = gp.collisionChecker.checkTile(this)
+        if (!collisionOn) {
+            keyH.setActionOnPressed(
+                onUp = { worldY -= speed },
+                onDown = { worldY += speed },
+                onLeft = { worldX -= speed },
+                onRight = { worldX += speed })
+        }
+
         spriteCounter++
         if (spriteCounter > 12) {
             if (spriteNum == 1) {
@@ -85,4 +114,5 @@ class Player(
         }
         g2.drawImage(image!!, screenX!!, screenY!!, gp.tileSize, gp.tileSize, null)
     }
+
 }

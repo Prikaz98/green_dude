@@ -5,6 +5,7 @@ import javax.imageio.ImageIO
 
 class Tile(collision: Boolean, image: BufferedImage) {
     val image = image
+    val collision = collision
 }
 
 enum class TileEnum : TileEn {
@@ -20,7 +21,7 @@ enum class TileEnum : TileEn {
     },
     WATER {
         override fun getTile(): Tile {
-            return Tile(false, ImageIO.read(javaClass.getResourceAsStream("/tiles/water.png")))
+            return Tile(true, ImageIO.read(javaClass.getResourceAsStream("/tiles/water.png")))
         }
     },
     EARTH {
@@ -35,7 +36,7 @@ enum class TileEnum : TileEn {
     },
     TREE {
         override fun getTile(): Tile {
-            return Tile(false, ImageIO.read(javaClass.getResourceAsStream("/tiles/tree.png")))
+            return Tile(true, ImageIO.read(javaClass.getResourceAsStream("/tiles/tree.png")))
         }
     }
 }
