@@ -12,8 +12,8 @@ import javax.swing.JPanel
 class GamePanel : JPanel, Runnable {
 
     val originalTileSize: Int = 16 //16x16
-    val scale: Int = 3
-    val tileSize: Int = originalTileSize * scale// 48x48 tile
+    val scale: Int = 4
+    val tileSize: Int = originalTileSize * scale // 48x48 tile
     val maxScreenCol = 16
     val maxScreenRow = 12
     val screenWidth = tileSize * maxScreenCol //768 px
@@ -24,12 +24,6 @@ class GamePanel : JPanel, Runnable {
     val player: Player = Player(this).init()
     val tileManager = TileManager(this)
     val keyH = KeyHandlerImpl()
-
-    //WORLD settings
-    val maxWorldCol = 50
-    val maxWorldRow = 50
-    val worldWidth = tileSize * maxWorldCol
-    val worldHeight = tileSize * maxWorldRow
 
     constructor() {
         this.preferredSize = Dimension(screenWidth, screenHeight)

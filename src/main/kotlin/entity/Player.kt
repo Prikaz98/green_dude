@@ -8,29 +8,20 @@ import javax.imageio.ImageIO
 
 class Player(
     val gp: GamePanel
-) : Entity(3) {
+) : Entity(4) {
 
-    var screenX: Int? = null
-    var screenY: Int? = null
-
-    val deviationX : Int
-        get() = this.screenX?.plus(this.worldX) ?: this.worldX
-    val deviationY : Int
-        get() = this.screenY?.plus(this.worldY) ?: this.worldY
-
+    var screenX: Int = gp.screenWidth / 2 - (gp.tileSize / 2)
+    var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
 
     override fun init(): Player {
-        screenX = gp.screenWidth / 2 - (gp.tileSize / 2)
-        screenY = gp.screenHeight / 2
-
         setDefaultValues()
         getPlayerImage()
         return this
     }
 
     private fun setDefaultValues() {
-        worldX = gp.tileSize
-        worldY = gp.tileSize
+        worldX = gp.tileSize * 14
+        worldY = gp.tileSize * 11
         direction = Direction.DOWN
     }
 

@@ -19,20 +19,25 @@ class TileManager(gp: GamePanel) {
     fun draw(g2: Graphics2D) {
         map.forEach { elementRow ->
             elementRow.cells.forEach { cell ->
-                val worldX = elementRow.y * tileSize
-                val worldY = cell.x * tileSize
-                val screenX = worldY - player.deviationX
-                val screenY = worldX - player.deviationY
+                val worldX = cell.x * tileSize
+                val worldY = elementRow.y * tileSize
+                val screenX = worldX - player.worldX + player.screenX
+                val screenY = worldY - player.worldY + player.screenY
 
-                g2.drawImage(
-                    tiles.get(cell.selectTile)?.image,
-                    screenX,
-                    screenY,
-                    tileSize,
-                    tileSize,
-                    null
-                )
-
+                if(worldX + tileSize > player.worldX - player.screenX
+                    && worldX - tileSize < player.worldX + player.screenX
+                    && worldY + tileSize > player.worldY - player.screenY
+                    && worldY - tileSize < player.worldY + player.screenY
+                ){
+                    g2.drawImage(
+                        tiles.get(cell.selectTile)?.image,
+                        screenX,
+                        screenY,
+                        tileSize,
+                        tileSize,
+                        null
+                    )
+                }
             }
         }
     }
@@ -40,7 +45,7 @@ class TileManager(gp: GamePanel) {
     private fun loadMap(path: String): ArrayList<ElementRow> {
         val map = BufferedReader(InputStreamReader(javaClass.getResourceAsStream(path)))
 
-        val mapData = map.lineSequence().foldIndexed(ArrayList<ElementRow>()) { index, acc, row ->
+        return map.lineSequence().foldIndexed(ArrayList()) { index, acc, row ->
             val chars =
                 row.toCharArray().asSequence().foldIndexed(ArrayList<ElementChar>(), { index, accChar, selectTile ->
                     accChar.add(ElementChar(index, selectTile.digitToInt()))
@@ -49,6 +54,5 @@ class TileManager(gp: GamePanel) {
             acc.add(ElementRow(index, chars))
             acc
         }
-        return mapData
     }
 }
