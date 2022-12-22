@@ -9,7 +9,7 @@ class CollisionChecker(gp: GamePanel) {
 
         val entityLeftWorldX = entity.worldX + entity.solidArea().x
         val entityRightWorldX = entity.worldX + entity.solidArea().x + entity.solidArea().width
-        val entityTopWorldY = entity.worldY - entity.solidArea().y
+        val entityTopWorldY = entity.worldY + entity.solidArea().y
         val entityBottomWorldY = entity.worldY + entity.solidArea().y + entity.solidArea().height
 
         val entityLeftCol = entityLeftWorldX / gp.tileSize

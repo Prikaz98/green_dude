@@ -22,7 +22,7 @@ class Player(
             solidArea!!
         } else {
 
-            solidArea = Rectangle(0, 0, gp.tileSize - 10, gp.tileSize - 10)
+            solidArea = Rectangle(0, 16, 32, 32)
             solidArea!!;
         }
     }
@@ -115,6 +115,7 @@ class Player(
             Direction.NOTHING -> image = down1
         }
         g2.drawImage(image!!, screenX!!, screenY!!, gp.tileSize, gp.tileSize, null)
+        g2.draw(this.solidArea())
     }
 
 }
