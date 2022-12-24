@@ -2,6 +2,7 @@ package entity
 
 import handle.KeyHandler
 import panels.GamePanel
+import utils.ImageLoader
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
@@ -11,6 +12,11 @@ import javax.imageio.ImageIO
 class Player(
     val gp: GamePanel
 ) : Entity(4) {
+
+    init {
+        setDefaultValues()
+        getPlayerImage()
+    }
 
     var screenX: Int = gp.screenWidth / 2 - (gp.tileSize / 2)
     var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
@@ -27,27 +33,21 @@ class Player(
         }
     }
 
-    override fun init(): Player {
-        setDefaultValues()
-        getPlayerImage()
-        return this
-    }
-
     private fun setDefaultValues() {
-        worldX = gp.tileSize * 14
-        worldY = gp.tileSize * 11
+        worldX = gp.tileSize * 31
+        worldY = gp.tileSize * 15
         direction = Direction.DOWN
     }
 
     private fun getPlayerImage() {
-        up1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_up_1.png"))
-        up2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_up_2.png"))
-        down1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_down_1.png"))
-        down2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_down_2.png"))
-        right1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1.png"))
-        right2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2.png"))
-        left1 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_1_left.png"))
-        left2 = ImageIO.read(javaClass.getResourceAsStream("/player/pixel_front_step_2_left.png"))
+        up1 = ImageLoader.getImage("/player/pixel_up_1.png")
+        up2 = ImageLoader.getImage("/player/pixel_up_2.png")
+        down1 = ImageLoader.getImage("/player/pixel_down_1.png")
+        down2 = ImageLoader.getImage("/player/pixel_down_2.png")
+        right1 = ImageLoader.getImage("/player/pixel_front_step_1.png")
+        right2 = ImageLoader.getImage("/player/pixel_front_step_2.png")
+        left1 = ImageLoader.getImage("/player/pixel_front_step_1_left.png")
+        left2 = ImageLoader.getImage("/player/pixel_front_step_2_left.png")
     }
 
     private fun KeyHandler.setActionOnPressed(
@@ -115,7 +115,6 @@ class Player(
             Direction.NOTHING -> image = down1
         }
         g2.drawImage(image!!, screenX!!, screenY!!, gp.tileSize, gp.tileSize, null)
-        g2.draw(this.solidArea())
     }
 
 }

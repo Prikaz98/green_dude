@@ -1,8 +1,10 @@
 package panels
 
+import AssetSetter
 import CollisionChecker
 import entity.Player
 import handle.KeyHandlerImpl
+import objects.SuperObject
 import tile.TileManager
 import java.awt.Color
 import java.awt.Dimension
@@ -23,7 +25,9 @@ class GamePanel : JPanel, Runnable {
 
     val FPS = 60.0
     val collisionChecker = CollisionChecker(this)
-    val player: Player = Player(this).init()
+    val assetSetter = AssetSetter(this)
+    val player: Player = Player(this)
+    val arrObj: Array<SuperObject?> = arrayOfNulls(10)
     val tileManager = TileManager(this)
     val keyH = KeyHandlerImpl()
 
@@ -35,6 +39,10 @@ class GamePanel : JPanel, Runnable {
         this.isFocusable = true
     }
 
+    fun setupGame() {
+        assetSetter.setObject()
+    }
+
     fun startGameThread() {
         gameThread = Thread(this)
         gameThread!!.start()
@@ -44,11 +52,11 @@ class GamePanel : JPanel, Runnable {
         gameLoopStart()
     }
 
-    private fun gameLoopStart(){
+    private fun gameLoopStart() {
         val drawInterval = 1_000_000_000 / FPS // 0.016666.. seconds
         var delta = 0.0
-        var lastTime : Long = System.nanoTime()
-        var currentTime : Long?
+        var lastTime: Long = System.nanoTime()
+        var currentTime: Long?
 
         while (gameThread != null) {
             currentTime = System.nanoTime()
@@ -56,7 +64,7 @@ class GamePanel : JPanel, Runnable {
             delta += (currentTime - lastTime) / drawInterval
             lastTime = currentTime
 
-            if(delta >= 1) {
+            if (delta >= 1) {
                 //1. UPDATE: information such as character position
                 update()
                 //2. DRAW: draw the screen with the updated information
@@ -67,7 +75,7 @@ class GamePanel : JPanel, Runnable {
     }
 
     fun update() {
-        if(keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed){
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
             player.update(keyH)
         }
     }
@@ -78,6 +86,8 @@ class GamePanel : JPanel, Runnable {
         val g2: Graphics2D = g as Graphics2D
 
         tileManager.draw(g2)
+
+        arrObj.forEach { it?.draw(g2,this) }
 
         player.draw(g2)
 

@@ -14,5 +14,6 @@ fun main(args: Array<String>) {
 
     window.setLocationRelativeTo(null)
     window.isVisible = true
+    gamePanel.setupGame()
     gamePanel.startGameThread()
 }
