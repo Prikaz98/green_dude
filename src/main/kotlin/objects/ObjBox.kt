@@ -6,5 +6,6 @@ class ObjBox : SuperObject() {
     init {
         name = "Key"
         image = ImageLoader.getImage("/objects/box.png")
+        collision = true
     }
 }

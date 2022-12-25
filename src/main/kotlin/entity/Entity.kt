@@ -26,7 +26,10 @@ abstract class Entity(
     abstract fun draw(g2: Graphics2D)
     abstract fun solidArea(): Rectangle
     abstract fun update(keyHandler: KeyHandler)
+    abstract fun getSolidAreaDefaultXY() : SolidAreaDefaultXY
+    abstract fun solidAreaToDefaultParams()
 }
+data class SolidAreaDefaultXY(val x : Int, val y : Int)
 
 enum class Direction {
     UP, DOWN, LEFT, RIGHT, NOTHING

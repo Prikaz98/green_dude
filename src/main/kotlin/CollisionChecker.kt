@@ -1,5 +1,6 @@
 import entity.Direction.*
 import entity.Entity
+import objects.SuperObject
 import panels.GamePanel
 import tile.getByXY
 
@@ -19,44 +20,49 @@ class CollisionChecker(gp: GamePanel) {
 
         when (entity.direction) {
             UP -> {
-                val entityTopRow = (entityTopWorldY - entity.speed)/gp.tileSize
-                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol,entityTopRow).selectTile
-                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol,entityTopRow).selectTile
-                if(gp.tileManager.tiles.get(tileNum1)?.collision == true ||
-                        gp.tileManager.tiles.get(tileNum2)?.collision == true){
-                   return true
-                }
-            }
-
-            DOWN -> {
-                val entityBottomRow = (entityBottomWorldY - entity.speed)/gp.tileSize
-                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol,entityBottomRow).selectTile
-                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol,entityBottomRow).selectTile
-                if(gp.tileManager.tiles.get(tileNum1)?.collision == true ||
-                    gp.tileManager.tiles.get(tileNum2)?.collision == true){
+                val entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize
+                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityTopRow).selectTile
+                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityTopRow).selectTile
+                if (gp.tileManager.tiles.get(tileNum1)?.collision == true ||
+                    gp.tileManager.tiles.get(tileNum2)?.collision == true
+                ) {
                     return true
                 }
             }
 
-            LEFT -> {
-                val entityLeftCol = (entityLeftWorldX - entity.speed)/gp.tileSize
-                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol,entityBottomRow).selectTile
-                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol,entityTopRow).selectTile
-                if(gp.tileManager.tiles.get(tileNum1)?.collision == true ||
-                    gp.tileManager.tiles.get(tileNum2)?.collision == true){
+            DOWN -> {
+                val entityBottomRow = (entityBottomWorldY + entity.speed) / gp.tileSize
+                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityBottomRow).selectTile
+                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityBottomRow).selectTile
+                if (gp.tileManager.tiles.get(tileNum1)?.collision == true ||
+                    gp.tileManager.tiles.get(tileNum2)?.collision == true
+                ) {
                     return true
                 }
             }
 
             RIGHT -> {
-                val entityRightCol = (entityRightWorldX - entity.speed)/gp.tileSize
-                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityRightCol,entityBottomRow).selectTile
-                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol,entityTopRow).selectTile
-                if(gp.tileManager.tiles.get(tileNum1)?.collision == true ||
-                    gp.tileManager.tiles.get(tileNum2)?.collision == true){
+                val entityRightCol = (entityRightWorldX - entity.speed) / gp.tileSize
+                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityBottomRow).selectTile
+                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityTopRow).selectTile
+                if (gp.tileManager.tiles.get(tileNum1)?.collision == true ||
+                    gp.tileManager.tiles.get(tileNum2)?.collision == true
+                ) {
                     return true
                 }
             }
+
+            LEFT -> {
+                val entityLeftCol = (entityLeftWorldX + entity.speed) / gp.tileSize
+                val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityBottomRow).selectTile
+                val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityTopRow).selectTile
+                if (gp.tileManager.tiles.get(tileNum1)?.collision == true ||
+                    gp.tileManager.tiles.get(tileNum2)?.collision == true
+                ) {
+                    return true
+                }
+            }
+
 
             NOTHING -> {
                 return false;
@@ -64,5 +70,58 @@ class CollisionChecker(gp: GamePanel) {
         }
 
         return false;
+    }
+
+    data class CheckObjectInfo(val collision: Boolean, val indexOfObject: Int?)
+
+    fun checkObject(entity: Entity, isPlayer: Boolean): CheckObjectInfo? {
+        return gp.arrObj.mapIndexed { index, obj ->
+            if (obj == null) {
+                null
+            } else {
+                entity.solidArea().x += entity.worldX
+                entity.solidArea().y += entity.worldY
+
+                obj.solidArea.x += obj.worldX
+                obj.solidArea.y += obj.worldY
+
+                fun evaluateCheckObjectInfo(obj: SuperObject) = if (entity.solidArea().intersects(obj.solidArea)) {
+                    CheckObjectInfo(obj.collision, if (isPlayer) index else null)
+                } else {
+                    null
+                }
+
+                val result: CheckObjectInfo? = when (entity.direction) {
+                    UP -> {
+                        entity.solidArea().y -= entity.speed
+                        evaluateCheckObjectInfo(obj)
+                    }
+
+                    DOWN -> {
+                        entity.solidArea().y += entity.speed
+                        evaluateCheckObjectInfo(obj)
+                    }
+
+                    LEFT -> {
+                        entity.solidArea().x -= entity.speed
+                        evaluateCheckObjectInfo(obj)
+                    }
+
+                    RIGHT -> {
+                        entity.solidArea().x += entity.speed
+                        evaluateCheckObjectInfo(obj)
+                    }
+
+
+                    NOTHING -> {
+                        null
+                    }
+                }
+                entity.solidAreaToDefaultParams()
+                obj.solidAreaToDefaultParams()
+                result
+            }
+        }
+            .reduce { l, r -> l ?: r }
     }
 }

@@ -1,36 +1,41 @@
 package entity
 
 import handle.KeyHandler
+import objects.ObjBox
+import objects.ObjDoor
+import objects.ObjKey
 import panels.GamePanel
 import utils.ImageLoader
-import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
-import javax.imageio.ImageIO
 
 class Player(
     val gp: GamePanel
 ) : Entity(4) {
+    var screenX: Int = gp.screenWidth / 2 - (gp.tileSize / 2)
+    var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
+    var hasKeys: Int = 0
+
 
     init {
         setDefaultValues()
         getPlayerImage()
     }
 
-    var screenX: Int = gp.screenWidth / 2 - (gp.tileSize / 2)
-    var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
-
-    private var solidArea: Rectangle? = null
-
+    private var solidArea: Rectangle = Rectangle(15, 28, 28, 28)
     override fun solidArea(): Rectangle {
-        return if (solidArea != null) {
-            solidArea!!
-        } else {
+        return solidArea
+    }
 
-            solidArea = Rectangle(0, 16, 32, 32)
-            solidArea!!;
-        }
+    private var solidAreaDefaultXY: SolidAreaDefaultXY = SolidAreaDefaultXY(solidArea.x, solidArea.y)
+    override fun getSolidAreaDefaultXY(): SolidAreaDefaultXY {
+        return solidAreaDefaultXY
+    }
+
+    override fun solidAreaToDefaultParams() {
+        solidArea.x = solidAreaDefaultXY.x
+        solidArea.y = solidAreaDefaultXY.y
     }
 
     private fun setDefaultValues() {
@@ -80,7 +85,17 @@ class Player(
             onLeft = { direction = Direction.LEFT },
             onRight = { direction = Direction.RIGHT })
 
-        collisionOn = gp.collisionChecker.checkTile(this)
+        var collisionOn = gp.collisionChecker.checkTile(this)
+        val checkObjectInfo = gp.collisionChecker.checkObject(this, true)
+
+        checkObjectInfo?.also {
+            if (it.collision) {
+                collisionOn = it.collision
+            }
+        }
+
+        checkObjectInfo?.indexOfObject?.also { pickUpObject(it) }
+
         if (!collisionOn) {
             keyH.setActionOnPressed(
                 onUp = { worldY -= speed },
@@ -97,6 +112,31 @@ class Player(
                 spriteNum = 1
             }
             spriteCounter = 0
+        }
+    }
+
+    fun pickUpObject(indexObj: Int) {
+        gp.arrObj.get(indexObj)?.let { obj ->
+            when (obj) {
+                is ObjKey -> {
+                    hasKeys++
+                    gp.arrObj[indexObj] = null
+                }
+
+                is ObjDoor -> {
+                    if (hasKeys > 0) {
+                        gp.arrObj[indexObj] = null
+                        hasKeys--
+                    }
+                }
+
+                is ObjBox -> {
+//                    if(hasKey){
+//                        gp.arrObj[indexObj]?.isOpen = false
+//                        hasKey = false
+//                    }
+                }
+            }
         }
     }
 

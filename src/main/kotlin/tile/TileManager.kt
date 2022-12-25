@@ -13,8 +13,8 @@ fun ArrayList<TileManager.ElementRow>.getByXY(x: Int, y: Int): TileManager.Eleme
 class TileManager(gp: GamePanel) {
     val player: Player = gp.player
 
-    data class ElementCell(val x: Int, val selectTile: Int)
     data class ElementRow(val y: Int, val cells: List<ElementCell>)
+    data class ElementCell(val x: Int, val selectTile: Int)
 
     val tiles: Array<Tile> = TileEnum.values().map { it.getTile() }.toTypedArray()
     val mapTileNumber = loadMap("/map")
