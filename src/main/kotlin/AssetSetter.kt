@@ -22,5 +22,14 @@ class AssetSetter(gp : GamePanel) {
         gp.arrObj[3] = ObjBox()
         gp.arrObj[3]?.worldX = gp.tileSize * 20
         gp.arrObj[3]?.worldY = gp.tileSize * 27
+
+        gp.arrObj[4] = ObjDoor()
+        gp.arrObj[4]?.worldX = gp.tileSize * 15
+        gp.arrObj[4]?.worldY = gp.tileSize * 22
+
+
+        gp.arrObj[5] = ObjBox()
+        gp.arrObj[5]?.worldX = gp.tileSize * 17
+        gp.arrObj[5]?.worldY = gp.tileSize * 25
     }
 }
