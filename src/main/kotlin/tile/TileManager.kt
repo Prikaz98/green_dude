@@ -35,7 +35,7 @@ class TileManager(gp: GamePanel) {
                     && worldY - tileSize < player.worldY + player.screenY
                 ) {
                     g2.drawImage(
-                        tiles.get(cell.selectTile)?.image,
+                        tiles.get(cell.selectTile).image,
                         screenX,
                         screenY,
                         tileSize,
@@ -51,13 +51,13 @@ class TileManager(gp: GamePanel) {
     private fun loadMap(path: String): ArrayList<ElementRow> {
         val map = BufferedReader(InputStreamReader(javaClass.getResourceAsStream(path)))
 
-        return map.lineSequence().foldIndexed(ArrayList()) { index, acc, row ->
+        return map.lineSequence().foldIndexed(ArrayList()) { indexRow, acc, row ->
             val chars =
-                row.toCharArray().asSequence().foldIndexed(ArrayList<ElementCell>(), { index, accChar, selectTile ->
-                    accChar.add(ElementCell(index, selectTile.digitToInt()))
+                row.toCharArray().asSequence().foldIndexed(ArrayList<ElementCell>(), { indexCell, accChar, selectTile ->
+                    accChar.add(ElementCell(indexCell, selectTile.digitToInt()))
                     accChar
                 })
-            acc.add(ElementRow(index, chars))
+            acc.add(ElementRow(indexRow, chars))
             acc
         }
     }

@@ -78,8 +78,8 @@ class Player(
 
     }
 
-    override fun update(keyH: KeyHandler) {
-        keyH.setActionOnPressed(
+    override fun update(keyHandler: KeyHandler) {
+        keyHandler.setActionOnPressed(
             onUp = { direction = Direction.UP },
             onDown = { direction = Direction.DOWN },
             onLeft = { direction = Direction.LEFT },
@@ -97,7 +97,7 @@ class Player(
         checkObjectInfo?.indexOfObject?.also { pickUpObject(it) }
 
         if (!collisionOn) {
-            keyH.setActionOnPressed(
+            keyHandler.setActionOnPressed(
                 onUp = { worldY -= speed },
                 onDown = { worldY += speed },
                 onLeft = { worldX -= speed },
@@ -154,7 +154,7 @@ class Player(
             Direction.RIGHT -> image = evaluateImageForStep(right1, right2)
             Direction.NOTHING -> image = down1
         }
-        g2.drawImage(image!!, screenX!!, screenY!!, gp.tileSize, gp.tileSize, null)
+        g2.drawImage(image!!, screenX, screenY, gp.tileSize, gp.tileSize, null)
     }
 
 }

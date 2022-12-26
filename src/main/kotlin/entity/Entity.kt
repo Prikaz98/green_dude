@@ -22,7 +22,6 @@ abstract class Entity(
 
     var spriteCounter = 0
     var spriteNum = 1
-    var collisionOn = false
     abstract fun draw(g2: Graphics2D)
     abstract fun solidArea(): Rectangle
     abstract fun update(keyHandler: KeyHandler)
