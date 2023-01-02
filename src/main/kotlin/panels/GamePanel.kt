@@ -6,13 +6,12 @@ import entity.Player
 import handle.KeyHandlerImpl
 import objects.SuperObject
 import tile.TileManager
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.Graphics
-import java.awt.Graphics2D
+import java.awt.*
 import javax.swing.JPanel
 
 class GamePanel : JPanel, Runnable {
+
+    val gpFont = Font(Font.MONOSPACED,Font.BOLD,17)
 
     val originalTileSize: Int = 16 //16x16
     val scale: Int = 4
@@ -86,6 +85,7 @@ class GamePanel : JPanel, Runnable {
         val g2: Graphics2D = g as Graphics2D
 
         tileManager.draw(g2)
+        g2.font = gpFont
 
         arrObj.forEach { it?.draw(g2,this) }
 

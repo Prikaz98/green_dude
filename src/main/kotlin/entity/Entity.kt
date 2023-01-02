@@ -6,7 +6,7 @@ import java.awt.Rectangle
 import java.awt.image.BufferedImage
 
 abstract class Entity(
-    val speed: Int,
+    var speed: Int,
 ) {
     var worldX: Int = 0
     var worldY: Int = 0

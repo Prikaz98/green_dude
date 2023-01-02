@@ -1,9 +1,11 @@
 package entity
 
 import handle.KeyHandler
+import objects.ObjBoots
 import objects.ObjBox
 import objects.ObjDoor
 import objects.ObjKey
+import other.Quest
 import panels.GamePanel
 import utils.ImageLoader
 import java.awt.Graphics2D
@@ -17,6 +19,7 @@ class Player(
     var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
     var hasKeys: Int = 0
 
+    var quests = arrayListOf(Quest("find two keys on the map", { hasKeys == 2 }))
 
     init {
         setDefaultValues()
@@ -130,6 +133,11 @@ class Player(
                     }
                 }
 
+                is ObjBoots -> {
+                    speed++
+                    gp.arrObj[indexObj] = null
+                }
+
                 is ObjBox -> {
 //                    if(hasKey){
 //                        gp.arrObj[indexObj]?.isOpen = false
@@ -154,7 +162,21 @@ class Player(
             Direction.RIGHT -> image = evaluateImageForStep(right1, right2)
             Direction.NOTHING -> image = down1
         }
+        getInfo()
+            .split("\n")
+            .forEachIndexed { i, row ->
+                g2.drawString(row, 15, 15 + (i * 20))
+            }
         g2.drawImage(image!!, screenX, screenY, gp.tileSize, gp.tileSize, null)
     }
+
+    fun getInfo(): String =
+        """
+            DUDE INFO 
+               keys  : $hasKeys
+               speed : $speed
+            QUESTS : 
+               ${quests.mapIndexed{i, q -> "${i + 1}. ${q.info()}"}.joinToString("\n")}
+        """.trimIndent()
 
 }

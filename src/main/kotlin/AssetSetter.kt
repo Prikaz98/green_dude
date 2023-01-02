@@ -1,3 +1,4 @@
+import objects.ObjBoots
 import objects.ObjBox
 import objects.ObjDoor
 import objects.ObjKey
@@ -28,7 +29,7 @@ class AssetSetter(gp : GamePanel) {
         gp.arrObj[4]?.worldY = gp.tileSize * 22
 
 
-        gp.arrObj[5] = ObjBox()
+        gp.arrObj[5] = ObjBoots()
         gp.arrObj[5]?.worldX = gp.tileSize * 17
         gp.arrObj[5]?.worldY = gp.tileSize * 25
     }
