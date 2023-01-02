@@ -11,6 +11,7 @@ import utils.ImageLoader
 import java.awt.Graphics2D
 import java.awt.Rectangle
 import java.awt.image.BufferedImage
+import java.lang.StringBuilder
 
 class Player(
     val gp: GamePanel
@@ -19,7 +20,10 @@ class Player(
     var screenY: Int = gp.screenHeight / 2 - (gp.tileSize / 2)
     var hasKeys: Int = 0
 
-    var quests = arrayListOf(Quest("find two keys on the map", { hasKeys == 2 }))
+    var quests = arrayListOf(
+        Quest("find two keys on the map", { hasKeys == 2 }),
+        Quest("find socks and become faster", { speed > 4  })
+    )
 
     init {
         setDefaultValues()
@@ -170,13 +174,10 @@ class Player(
         g2.drawImage(image!!, screenX, screenY, gp.tileSize, gp.tileSize, null)
     }
 
-    fun getInfo(): String =
-        """
-            DUDE INFO 
-               keys  : $hasKeys
-               speed : $speed
-            QUESTS : 
-               ${quests.mapIndexed{i, q -> "${i + 1}. ${q.info()}"}.joinToString("\n")}
-        """.trimIndent()
-
+    fun getInfo(): String {
+        val builder = StringBuilder()
+        builder.append("DUDE INFO\n   keys : $hasKeys\n   speed : $speed\n")
+        builder.append("QUESTS : \n${quests.mapIndexed{i, q -> "${i + 1}. ${q.info()}"}.joinToString("\n")}")
+        return builder.toString()
+    }
 }
