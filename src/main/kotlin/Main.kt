@@ -2,7 +2,6 @@ import panels.GamePanel
 import javax.swing.JFrame
 
 fun main(args: Array<String>) {
-    println(args)
     val window = JFrame()
     window.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
     window.isResizable = false
@@ -17,4 +16,9 @@ fun main(args: Array<String>) {
     window.isVisible = true
     gamePanel.setupGame()
     gamePanel.startGameThread()
+    Runtime.getRuntime()?.addShutdownHook(
+        Thread{
+            println("goodbye!")
+        }
+    )
 }
