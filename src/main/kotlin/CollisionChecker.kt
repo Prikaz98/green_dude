@@ -23,44 +23,32 @@ class CollisionChecker(gp: GamePanel) {
                 entityTopRow = (entityTopWorldY - entity.speed) / gp.tileSize
                 val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityTopRow).selectTile
                 val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityTopRow).selectTile
-                if (gp.tileManager.tiles.get(tileNum1).collision == true ||
-                    gp.tileManager.tiles.get(tileNum2).collision == true
-                ) {
-                    return true
-                }
+                return (gp.tileManager.tiles.get(tileNum1).collision ||
+                        gp.tileManager.tiles.get(tileNum2).collision)
             }
 
             DOWN -> {
                 entityBottomRow = (entityBottomWorldY + entity.speed) / gp.tileSize
                 val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityBottomRow).selectTile
                 val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityBottomRow).selectTile
-                if (gp.tileManager.tiles.get(tileNum1).collision == true ||
-                    gp.tileManager.tiles.get(tileNum2).collision == true
-                ) {
-                    return true
-                }
+                return (gp.tileManager.tiles.get(tileNum1).collision ||
+                        gp.tileManager.tiles.get(tileNum2).collision)
             }
 
             RIGHT -> {
                 entityRightCol = (entityRightWorldX - entity.speed) / gp.tileSize
                 val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityBottomRow).selectTile
                 val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityRightCol, entityTopRow).selectTile
-                if (gp.tileManager.tiles.get(tileNum1).collision == true ||
-                    gp.tileManager.tiles.get(tileNum2).collision == true
-                ) {
-                    return true
-                }
+                return (gp.tileManager.tiles.get(tileNum1).collision ||
+                        gp.tileManager.tiles.get(tileNum2).collision)
             }
 
             LEFT -> {
                 entityLeftCol = (entityLeftWorldX + entity.speed) / gp.tileSize
                 val tileNum1 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityBottomRow).selectTile
                 val tileNum2 = gp.tileManager.mapTileNumber.getByXY(entityLeftCol, entityTopRow).selectTile
-                if (gp.tileManager.tiles.get(tileNum1).collision == true ||
-                    gp.tileManager.tiles.get(tileNum2).collision == true
-                ) {
-                    return true
-                }
+                return (gp.tileManager.tiles.get(tileNum1).collision ||
+                        gp.tileManager.tiles.get(tileNum2).collision)
             }
 
 

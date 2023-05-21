@@ -7,21 +7,20 @@ import java.awt.image.BufferedImage
 
 class FireBall(
     lifeTime: Int,
-    var x: Int,
-    var y: Int,
-    val direction: Direction,
-    val speed: Int,
+    x: Int,
+    y: Int,
+    direction: Direction,
+    speed: Int,
     val gp: GamePanel
-) {
-
+) : Entity(speed, direction, x, y) {
     var restOfLife = lifeTime
 
-    fun draw(g2: Graphics2D) {
+    override fun draw(g2: Graphics2D) {
         if (restOfLife > 0) {
             val player = gp.player
             val tileSize = gp.tileSize
-            val screenX = x - player.worldX + player.screenX
-            val screenY = y - player.worldY + player.screenY
+            val screenX = worldX - player.worldX + player.screenX
+            val screenY = worldY - player.worldY + player.screenY
             g2.drawImage(getImage(), screenX, screenY, tileSize, tileSize, null)
             move()
             restOfLife--
@@ -38,12 +37,17 @@ class FireBall(
         }
 
     private fun move() {
-        when (direction) {
-            Direction.DOWN -> y += speed
-            Direction.UP -> y -= speed
-            Direction.LEFT -> x -= speed
-            Direction.RIGHT -> x += speed
-            else -> {}
+        val collisionOn = gp.collisionChecker.checkTile(this)
+        if (collisionOn) {
+            restOfLife = 0
+        } else {
+            when (direction) {
+                Direction.DOWN -> worldY += speed
+                Direction.UP -> worldY -= speed
+                Direction.LEFT -> worldX -= speed
+                Direction.RIGHT -> worldX += speed
+                else -> {}
+            }
         }
     }
 
