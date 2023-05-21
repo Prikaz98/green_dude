@@ -84,7 +84,11 @@ class Player(
             onLeft = { direction = Direction.LEFT },
             onRight = { direction = Direction.RIGHT },
             onFire = {
-                fireBalls.add(FireBall(100, worldX, worldY, keyImg,direction, 4, gp))
+                val lifeTime = 100
+                val threshold = 20
+                if (fireBalls.find { it.restOfLife > (lifeTime - threshold) } == null) {
+                    fireBalls.add(FireBall(lifeTime, worldX, worldY, direction, 8, gp))
+                }
             })
 
         var collisionOn = gp.collisionChecker.checkTile(this)
@@ -187,6 +191,9 @@ class Player(
 
         start = start.plusNanos(16 * 1_000_000)//0.016 seconds
         g2.drawString(start.format(DateTimeFormatter.ofPattern("mm:ss:S")), 300, 50)
+
+        g2.drawString("For run use arrows, Button X for Fire", 20, 750)
+
         g2.drawImage(dudeImg, screenX, screenY, gp.tileSize, gp.tileSize, null)
     }
 
