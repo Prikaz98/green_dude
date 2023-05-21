@@ -9,6 +9,7 @@ class KeyHandlerImpl : KeyHandler {
     override var downPressed: Boolean = false
     override var leftPressed: Boolean = false
     override var rightPressed: Boolean = false
+    override var firePressed: Boolean = false
 
     override fun keyTyped(e: KeyEvent?) {
 
@@ -19,11 +20,12 @@ class KeyHandlerImpl : KeyHandler {
     }
 
     private fun extracted(code: Int?, setBool: Boolean) {
-        when(code){
+        when (code) {
             KeyEvent.VK_UP -> upPressed = setBool
             KeyEvent.VK_DOWN -> downPressed = setBool
             KeyEvent.VK_LEFT -> leftPressed = setBool
             KeyEvent.VK_RIGHT -> rightPressed = setBool
+            KeyEvent.VK_X -> firePressed = setBool
         }
     }
 
@@ -31,9 +33,11 @@ class KeyHandlerImpl : KeyHandler {
         extracted(e?.keyCode, false)
     }
 }
-interface KeyHandler: KeyListener {
+
+interface KeyHandler : KeyListener {
     var upPressed: Boolean
     var downPressed: Boolean
     var leftPressed: Boolean
     var rightPressed: Boolean
+    var firePressed: Boolean
 }

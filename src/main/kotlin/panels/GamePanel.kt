@@ -11,7 +11,7 @@ import javax.swing.JPanel
 
 class GamePanel : JPanel, Runnable {
 
-    val gpFont = Font(Font.MONOSPACED,Font.BOLD,17)
+    val gpFont = Font(Font.MONOSPACED,Font.BOLD,28)
 
     val originalTileSize: Int = 16 //16x16
     val scale: Int = 4
@@ -74,7 +74,7 @@ class GamePanel : JPanel, Runnable {
     }
 
     fun update() {
-        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.firePressed) {
             player.update(keyH)
         }
     }
