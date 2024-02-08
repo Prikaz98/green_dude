@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     gamePanel.setupGame()
     gamePanel.startGameThread()
     Runtime.getRuntime()?.addShutdownHook(
-        Thread{
+        Thread {
             println("goodbye!")
         }
     )

@@ -79,7 +79,9 @@ class GamePanel : JPanel, Runnable {
 
     fun update() {
         if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed || keyH.firePressed) {
-            player.update(keyH)
+            if(!player.isFinishGame){
+                player.update(keyH)
+            }
         }
     }
 

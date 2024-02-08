@@ -24,6 +24,8 @@ class Player(
     val keyImg = ImageLoader.getImage("/objects/key.png")
     val fireBalls = ArrayList<FireBall>()
     val notificationList = ArrayList<TextNotification>()
+    var isFinishGame = false
+    val timer = Timer(this)
 
     init {
         setDefaultValues()
@@ -121,7 +123,7 @@ class Player(
                         notificationList.add(TextNotification("OPENED THE DOOR!", 80))
                         gp.arrObj[indexObj] = null
                         hasKeys--
-                    }
+                    } else {}
                 }
 
                 is ObjBoots -> {
@@ -131,17 +133,27 @@ class Player(
                 }
 
                 is ObjBox -> {
-//                    if(hasKey){
-//                        gp.arrObj[indexObj]?.isOpen = false
-//                        hasKey = false
-//                    }
+                    gp.arrObj[indexObj] = null
+                    isFinishGame = true
+                    notificationList.add(TextNotification("Congratulation you found a treasure,time:${timer.getString()} ", 2000))
                 }
+
+                else -> {}
             }
         }
     }
 
+    class Timer(val player: Player) {
+        var start = LocalDateTime.now().withMinute(0).withSecond(0)
+        fun incrementTime() {
+            if (!player.isFinishGame) {
+                start = start.plusNanos(16 * 1_000_000)
+            }
+        }
 
-    var start = LocalDateTime.now().withMinute(0).withSecond(0)
+        fun getString(): String = start.format(DateTimeFormatter.ofPattern("mm:ss:S"))
+    }
+
 
     override fun draw(g2: Graphics2D) {
         fun evaluateImageForStep(vararg args: BufferedImage?): BufferedImage? {
@@ -160,8 +172,8 @@ class Player(
         drawNotification(g2)
         drawFireBalls(g2)
 
-        start = start.plusNanos(16 * 1_000_000)//0.016 seconds
-        g2.drawString(start.format(DateTimeFormatter.ofPattern("mm:ss:S")), 300, 50)
+        timer.incrementTime()//0.016 seconds
+        g2.drawString(timer.getString(), 300, 50)
 
         g2.drawString("For run use arrows, Button X for Fire", 20, 750)
 
